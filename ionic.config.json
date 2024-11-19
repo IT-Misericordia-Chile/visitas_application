@@ -1,5 +1,7 @@
 {
   "name": "visitas",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
