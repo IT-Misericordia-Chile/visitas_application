@@ -11,4 +11,8 @@ export class FooterComponent  implements OnInit {
 
   ngOnInit() {}
 
+  addLocation() {
+    console.log("add new Location");
+  }
+
 }

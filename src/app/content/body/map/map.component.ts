@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { GoogleMap, MapType, Marker } from '@capacitor/google-maps';
+import { GoogleMap, Marker} from '@capacitor/google-maps';
 import { MenuController, ModalController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
+
+import { Location, LocationService } from 'src/app/services/location-service';
+
 const apiKey = environment.apiKey;
 
 @Component({
@@ -13,11 +16,15 @@ const apiKey = environment.apiKey;
 export class MapComponent  implements OnInit {
 
   map: GoogleMap = {} as GoogleMap;
+  locations: Array<Location> = [];
 
-  constructor(private menuController: MenuController, private modalController: ModalController) {
+  constructor(private menuController: MenuController, 
+    private modalController: ModalController,
+    private locationService: LocationService) {
   }
 
   ngOnInit() {
+    this.locations = this.locationService.getLocations();
     this.initMap();
   }
 
@@ -34,9 +41,9 @@ export class MapComponent  implements OnInit {
         },
         zoom: 17,
       },
-      language: "es"
+      language: "es",    
     });
-    this.map.setMapType(MapType.Satellite);
+    //this.map.setMapType(MapType.Satellite);
     this.map.enableCurrentLocation(true);
   }
 
@@ -78,3 +85,4 @@ export class MapComponent  implements OnInit {
     await modal.present();
   } 
 }
+
