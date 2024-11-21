@@ -1,19 +1,31 @@
 import { Injectable } from '@angular/core';
 import { Marker } from '@capacitor/google-maps';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocationService {
-  private locations: Array<Location> = [];
+  locations: Array<Location> = [
+    {
+      id: "0",
+      name: "TestLocation",
+      description: "Ouais",
+      marker: { coordinate: { lat: 0, lng: 0 }},
+      markerId: "-1",
+      inhabitants: "",
+      locationFullName: "Ébano 6300, 8590100 Santiago, Huechuraba, Región Metropolitana",
+      dateLastVisit: new Date()
+    }
+  ];
 
-  getLocations(): Array<Location> {
-    return [...this.locations];
+  getLocations(): Observable<Array<Location>> {
+    return of([...this.locations]);
   }
 
   addLocation(location: Location): boolean {
     this.locations.push(location);
-    console.log("new location added !");
+    console.log("new location added !", this.locations);
     return (true);
   }
 }
@@ -23,6 +35,7 @@ export interface Location {
     name: string,
     description?: string,
     marker: Marker,
+    markerId?: string,
     inhabitants?: string;
     inhabitantsId?: Array<Inhabitant>,
     locationFullName: string,

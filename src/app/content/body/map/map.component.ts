@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { GoogleMap, Marker} from '@capacitor/google-maps';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { GoogleMap } from '@capacitor/google-maps';
 import { MenuController, ModalController } from '@ionic/angular';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -13,8 +13,9 @@ import { MapService } from 'src/app/services/map-service';
   styleUrls: ['./map.component.scss'],
 })
 
-export class MapComponent  implements OnInit {
-  private _isDead$ = new Subject();
+export class MapComponent  implements OnInit, OnDestroy {
+  private _mapSub$ = new Subject<void>();
+  private _locationsSub$ = new Subject<void>();
 
   map: GoogleMap = {} as GoogleMap;
   locations: Array<Location> = [];
@@ -26,15 +27,42 @@ export class MapComponent  implements OnInit {
   }
 
   ngOnInit() {
-    this.locations = this.locationService.getLocations();
+    this.locationService.getLocations()
+      .pipe(takeUntil(this._locationsSub$))
+      .subscribe(data => {
+        console.log("refresh1", data);
+        this.locations = data;
+      });
     this.mapService.initMap()
-      .then(map => 
-        this.mapService.getMap()
-          .pipe(takeUntil(this._isDead$))
-          .subscribe(data => this.map = data));
+      .then(sub => this.mapService.getMap()
+          .pipe(takeUntil(this._mapSub$))
+          .subscribe(data => {
+            this.map = data
+            console.log("refresh2");
+          }))
+          .then(sub => this.map.setOnMarkerClickListener(marker => 
+            {
+              console.log("MarkerOnClickListener", marker);
+              this.showLocations(marker.markerId);
+            })
+          );
   }
 
-  addLocations() {
+  showLocations(markerId: string) {
+    console.log("Hello");
+    console.log("Locations : ", this.locations);
+    const exist = this.locations.find(location => location.markerId === markerId);
+    if (exist) {
+      console.log(exist);
+    }
+  }
+
+  ngOnDestroy() {
+    this._mapSub$.next();
+    this._locationsSub$.next();
+  }
+
+  /*addLocations() {
     this.map.setOnMapClickListener( res => {
       console.log("Ajout d'une adresse");
       //ici faire une modale de modification, si un abandon est fait 
@@ -60,6 +88,6 @@ export class MapComponent  implements OnInit {
       //aller chercher dans le back si le marker existe chez nous
       //si il existe lancer une requète de modification et créer une modale de modification
     })
-  }
+  }*/
 }
 

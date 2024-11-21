@@ -9,7 +9,6 @@ const apiKey = environment.apiKey;
   providedIn: 'root'
 })
 export class MapService {
-  private locations: Array<Location> = [];
   map: GoogleMap = {} as GoogleMap;
 
   async initMap() {
@@ -31,12 +30,11 @@ export class MapService {
     this.map.enableCurrentLocation(true);
   }
   
-getMap(): Observable<GoogleMap> {
-    return of(this.map);
-}
+  getMap(): Observable<GoogleMap> {
+      return of(this.map);
+  }
 
-addMarker(marker: Marker) {
-    this.map.addMarker(marker);
-}
-
+  addMarker(marker: Marker): Promise<string> {
+      return this.map.addMarker(marker);
+  }
 }

@@ -30,7 +30,9 @@ export class FooterComponent {
       //transformer ce message en popup
       //this.message = `Lieu ajouté : ${data.name} !`;
       if (this.locationService.addLocation(data)) {
-        this.mapService.addMarker(data.marker);
+        await this.mapService.addMarker(data.marker).then(id => {
+          data.id = id;
+        });
       }
     }
   }

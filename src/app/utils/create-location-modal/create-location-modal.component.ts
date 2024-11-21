@@ -35,6 +35,9 @@ export class CreateLocationModalComponent{
   }
 
   confirm() {
+    this.location.marker.title = this.location.name;
+    this.location.marker.snippet = this.location.description;
+    //this.location.marker.draggable = true;
     return this.modalCtrl.dismiss(this.location, 'confirm');
   }
 
@@ -50,7 +53,7 @@ export class CreateLocationModalComponent{
         defaultLocale: "es",
         apiKey: apiKey
       });
-      if (result) {
+      if (result != null && result.addresses != null) {
         this.location.marker.coordinate = {
         lat: result.addresses[0].latitude, 
         lng: result.addresses[0].longitude}
