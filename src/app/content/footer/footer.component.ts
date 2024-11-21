@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { CreateLocationModalComponent } from '../../utils/create-location-modal/create-location-modal.component';
 import { LocationService } from 'src/app/services/location-service';
+import { MapService } from 'src/app/services/map-service';
 
 @Component({
   selector: 'app-footer',
@@ -9,10 +10,9 @@ import { LocationService } from 'src/app/services/location-service';
   styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent {
-  message = 'This modal example uses triggers to automatically open a modal when the button is clicked.';
-
   constructor(private modalCtrl: ModalController,
-    private locationService: LocationService
+    private locationService: LocationService,
+    private mapService: MapService
   ) { }
 
   async openModal() {
@@ -28,9 +28,10 @@ export class FooterComponent {
 
     if (role === 'confirm') {
       //transformer ce message en popup
-      this.message = `Lieu ajouté : ${data.name} !`;
-      this.locationService.addLocation(data);
-      //ajouter le marqueur à cet endroit
+      //this.message = `Lieu ajouté : ${data.name} !`;
+      if (this.locationService.addLocation(data)) {
+        this.mapService.addMarker(data.marker);
+      }
     }
   }
 

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { GoogleMap, Marker} from '@capacitor/google-maps';
 import { MenuController, ModalController } from '@ionic/angular';
-import { environment } from 'src/environments/environment';
+import { Subject, takeUntil } from 'rxjs';
 
 import { Location, LocationService } from 'src/app/services/location-service';
+import { MapService } from 'src/app/services/map-service';
 
-const apiKey = environment.apiKey;
 
 @Component({
   selector: 'app-map',
@@ -14,37 +14,24 @@ const apiKey = environment.apiKey;
 })
 
 export class MapComponent  implements OnInit {
+  private _isDead$ = new Subject();
 
   map: GoogleMap = {} as GoogleMap;
   locations: Array<Location> = [];
 
   constructor(private menuController: MenuController, 
     private modalController: ModalController,
-    private locationService: LocationService) {
+    private locationService: LocationService,
+    private mapService: MapService) {
   }
 
   ngOnInit() {
     this.locations = this.locationService.getLocations();
-    this.initMap();
-  }
-
-  async initMap() {
-    this.map = await GoogleMap.create({
-      id: 'my-map',
-      element: document.getElementById('map') as HTMLElement,
-      apiKey: apiKey,
-      config: {
-        disableDefaultUI: true,
-        center: {
-          lat: -33.361146,
-          lng: -70.631471,
-        },
-        zoom: 17,
-      },
-      language: "es",    
-    });
-    //this.map.setMapType(MapType.Satellite);
-    this.map.enableCurrentLocation(true);
+    this.mapService.initMap()
+      .then(map => 
+        this.mapService.getMap()
+          .pipe(takeUntil(this._isDead$))
+          .subscribe(data => this.map = data));
   }
 
   addLocations() {
@@ -74,15 +61,5 @@ export class MapComponent  implements OnInit {
       //si il existe lancer une requète de modification et créer une modale de modification
     })
   }
-
-  async addLocationInfo() {
-    const modal = await this.modalController.create({
-      component: null, //createLocationComponent,
-      componentProps: {}, //info de la localitée à récuperer dans le back,
-      initialBreakpoint: 0.25,
-      breakpoints: [0, 0.25]
-    });
-    await modal.present();
-  } 
 }
 

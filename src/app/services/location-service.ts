@@ -11,9 +11,10 @@ export class LocationService {
     return [...this.locations];
   }
 
-  addLocation(location: Location): void {
+  addLocation(location: Location): boolean {
     this.locations.push(location);
     console.log("new location added !");
+    return (true);
   }
 }
 
