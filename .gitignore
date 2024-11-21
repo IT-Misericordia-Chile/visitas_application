@@ -12,6 +12,9 @@ $RECYCLE.BIN/
 *.log
 log.txt
 
+# Env
+/environments
+*environment*
 
 /.sourcemaps
 /.versions
