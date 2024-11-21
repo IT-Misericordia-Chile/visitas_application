@@ -1,4 +1,8 @@
 <ion-footer>
-      <ion-button id="addLocation" shape="round" (click)="addLocation()">+</ion-button>
-      <ion-toolbar></ion-toolbar>
+      <ion-button id="addLocation" shape="round" (click)="openModal()">+</ion-button>
+      <ng-template>
+      </ng-template>
+      <ion-toolbar>
+        <p>{{ message }}</p>
+      </ion-toolbar>
 </ion-footer>

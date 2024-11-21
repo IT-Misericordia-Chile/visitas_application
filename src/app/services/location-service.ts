@@ -11,29 +11,19 @@ export class LocationService {
     return [...this.locations];
   }
 
-  addLocation(): void {
-    //ici lancer la création du formulaire
-    const location: Location = {
-        id: "",
-        name: "",
-        marker: { 
-            coordinate: {
-                lat: 0,
-                lng: 0,
-            }
-        },
-        locationFullName: "",
-    };
+  addLocation(location: Location): void {
     this.locations.push(location);
+    console.log("new location added !");
   }
 }
 
 export interface Location {
-    id: string,
+    id?: string,
     name: string,
     description?: string,
     marker: Marker,
-    inhabitants?: Array<Inhabitant>,
+    inhabitants?: string;
+    inhabitantsId?: Array<Inhabitant>,
     locationFullName: string,
     dateLastVisit?: Date
   }

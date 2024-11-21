@@ -1,0 +1,44 @@
+
+  <ion-header>
+    <ion-title>Agregar una dirección</ion-title>
+  </ion-header>
+  <ion-content class="ion-padding">
+    <ion-item>
+      <ion-input labelPlacement="floating" 
+      type="text" [clearInput]="true" fill="outline"
+      placeholder="Centro Misericordia" [value]="location.name" (ionInput)="updateLocationInfo($event, 'location')">
+      <div slot="label">Nombre del Lugar<ion-text color="danger">(*)</ion-text></div>
+    </ion-input>  
+    </ion-item>
+    <ion-item>
+      <ion-input label="Nombres de los residentes" labelPlacement="stacked" 
+      type="text" [clearInput]="true" fill="outline"
+      placeholder="Roman y Reina" [value]="location.inhabitants" (ionInput)="updateLocationInfo($event, 'inhabitants')"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input label="Descripción" labelPlacement="stacked"
+      type="text" [clearInput]="true" fill="outline"
+      placeholder="Se siente solo" [value]="location.description" (ionInput)="updateLocationInfo($event, 'desc')"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input labelPlacement="stacked" 
+      type="text" [clearInput]="true" fill="outline"
+      placeholder="Av. Recoleta 6300"  [value]="location.locationFullName" (ionInput)="updateLocationInfo($event, 'adress')">
+      <div slot="label">Agregar una dirección<ion-text color="danger">(*)</ion-text></div>
+    </ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input label="Fecha de la última visita" labelPlacement="stacked" 
+      type="Date" fill="outline" 
+      placeholder="10/01/24" [value]="location.dateLastVisit" (ionInput)="updateLocationInfo($event, 'date')"></ion-input>
+    </ion-item>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button (click)="cancel()">Cancelar</ion-button>
+      </ion-buttons>
+      <ion-buttons slot="end">
+        <ion-button (click)="confirm()" [disabled]="!canConfirm" [strong]="true">Confirmar</ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-content>
+  
